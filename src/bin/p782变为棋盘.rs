@@ -22,9 +22,15 @@ impl Solution {
         }
         ans
     }
+    /// Return the minimum number of steps to transform `st` to `ed` on a chessboard.
+    /// The steps are swaps of two elements in the same row or column.
+    /// Return INF if it is impossible to transform `st` to `ed`.
     fn steps_to_target(st: i32, ed: i32) -> i32 {
         if st.count_ones() != ed.count_ones() {return INF} else {(st ^ ed).count_ones() as i32 >> 1} 
     }
+    /// Given a board, return the minimum number of steps to transform the board into a chessboard.
+    /// The steps are swaps of two elements in the same row or column.
+    /// Return -1 if it is impossible to transform the board into a chessboard.
     pub fn moves_to_chessboard(board: Vec<Vec<i32>>) -> i32 {
         let n = board.len();
         let mut set = HashSet::new();
