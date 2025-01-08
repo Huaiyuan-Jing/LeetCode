@@ -1,32 +1,34 @@
-use std::collections::HashMap;
-
 struct Solution;
 impl Solution {
     pub fn valid_substring_count(word1: String, word2: String) -> i64 {
-        let mut word2_cnt = HashMap::new();
-        for c in word2.chars() {
-            *word2_cnt.entry(c).or_insert(0) += 1;
+        let mut diff: Vec<i16> = vec![0; 26];
+        let n = word1.len();
+        let mut ans: i64 = 0;
+        for ch in word2.bytes() {
+            diff[ch as usize - 'a' as usize] -= 1;
         }
-        let mut ed = -1 as i32;
-        let mut word1_cnt = HashMap::new();
-        let mut cnt_char = 0;
-        let mut ans = 0;
-        for (_, c) in word1.chars().enumerate() {
-            while ed < word1.len() as i32 && cnt_char < word2_cnt.len() {
-                ed += 1;
-                let c2 = word1.chars().nth(ed as usize).unwrap();
-                *word1_cnt.entry(c2).or_insert(0) += 1;
-                if word1_cnt[&c2] == word2_cnt[&c2] {
-                    cnt_char += 1;
-                }
+        let mut cnt = diff.iter().filter(|val| **val < 0).count();
+        let mut update_cnt = |ch: u8, add: i8, cnt: &mut usize| {
+            let ch = ch as usize - 'a' as usize;
+            diff[ch] += add as i16;
+            if add == 1 && diff[ch] == 0 {
+                *cnt -= 1;
+            } else if add == -1 && diff[ch] == -1 {
+                *cnt += 1;
             }
-            ans += word1_cnt.len() as i64 - cnt_char as i64;
-            *word1_cnt.entry(c).or_insert(0) -= 1;
-            if word1_cnt[&c] == word2_cnt[&c] - 1 {
-                cnt_char -= 1;
+        };
+        let mut l = 0;
+        let mut r = 0;
+        while r < n {
+            update_cnt(word1.bytes().nth(r).unwrap(), 1, &mut cnt);
+            r += 1;
+            while cnt == 0 {
+                ans += (n - r + 1) as i64;
+                update_cnt(word1.bytes().nth(l).unwrap(), -1, &mut cnt);
+                l += 1;
             }
         }
-        ans
+        return ans;
     }
 }
 fn main() {
