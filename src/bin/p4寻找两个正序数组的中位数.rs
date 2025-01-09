@@ -19,29 +19,17 @@ impl Solution {
         }
         let p1 = l;
         let p2 = k - l;
-        let c1 = (if p1 <= 0 {
-            std::i32::MIN
-        } else {
-            nums1[p1 - 1]
-        })
-        .max(if p2 <= 0 {
-            std::i32::MIN
-        } else {
-            nums2[p2 - 1]
-        });
+        let c1 = nums1
+            .get(p1 - 1)
+            .unwrap_or(&i32::MIN)
+            .max(nums2.get(p2 - 1).unwrap_or(&i32::MIN));
         if (nums1.len() + nums2.len()) % 2 == 1 {
-            return c1 as f64;
-        } 
-        let c2 = (if p1 >= nums1.len() {
-            std::i32::MAX
-        } else {
-            nums1[p1]
-        })
-        .min(if p2 >= nums2.len() {
-            std::i32::MAX
-        } else {
-            nums2[p2]
-        });
+            return *c1 as f64;
+        }
+        let c2 = nums1
+            .get(p1)
+            .unwrap_or(&i32::MAX)
+            .min(nums2.get(p2).unwrap_or(&i32::MAX));
         return (c1 + c2) as f64 / 2.0;
     }
 }
