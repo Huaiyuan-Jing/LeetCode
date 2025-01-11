@@ -1,5 +1,3 @@
-use core::num;
-
 struct Solution;
 impl Solution {
     pub fn generate_key(num1: i32, num2: i32, num3: i32) -> i32 {
@@ -19,4 +17,9 @@ impl Solution {
         ans
     }
 }
-fn main() {}
+fn main() {
+    let num1 = 2;
+    let num2 = 3;
+    let num3 = 4;
+    println!("{}", Solution::generate_key(num1, num2, num3));
+}
